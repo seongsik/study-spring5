@@ -15,7 +15,7 @@ ext {
     springIntegrationVersion = '5.0.2.BUILD-SNAPSHOT'
 
     //logging libs
-    slf4jVersion = '2.0.0'
+    slf4jVersion = '1.7.30'
     logbackVersion = '1.2.11'
 
     groovyVersion = '2.4.5'
