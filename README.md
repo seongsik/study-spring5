@@ -12,6 +12,5 @@
 * HelloWorldDecoupled : 수정하기 쉬운 유연한 메커니즘 구현
 * HelloWorldDecoupledWithFactory : 가변적인 내용을 외부에서 관리하고 런타임에 명령줄 인자로부터 메시지 내용을 받아오는 것.
 * HelloWorldSpringDI : Spring Context 에 Bean 을 정의, 의존성을 주입하여 Context로부터 Bean 획득
-
-
+* HelloWorldSpringAnnotated : 빈 정의를 담는 @Configuration 애터테이션이 붙은 클래스를 이용해 의존성을 주입. 
 

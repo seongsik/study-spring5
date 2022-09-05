@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- beans : Spring 기본 namespace. -->
+<!-- 스프링이 관리하는 빈을 정의하는 데 사용함. -->
+<!-- beans > p : DI 요구속성을 명시할 때 사용. -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
