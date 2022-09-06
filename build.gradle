@@ -20,6 +20,7 @@ ext {
 
     groovyVersion = '2.4.5'
     guavaVersion = '21.0'
+    lombokVersion = '1.18.24'
 
     aspectjVersion = '1.8.13'
     derbyVersion = '10.13.1.1'
@@ -134,6 +135,7 @@ ext {
     misc = [
             slf4jJcl       : "org.slf4j:jcl-over-slf4j:$slf4jVersion",
             logback        : "ch.qos.logback:logback-classic:$logbackVersion",
+            lombok         : "org.projectlombok:lombok:$lombokVersion",
             groovy         : "org.codehaus.groovy:groovy-all:$groovyVersion",
             inject         : "javax.inject:javax.inject:1",
             validation     : "javax.validation:validation-api:$javaxValidationVersion",
@@ -199,7 +201,7 @@ repositories {
 }
 
 dependencies {
-    compile spring.context, misc.slf4jJcl, misc.logback
+    compile spring.context, misc.slf4jJcl, misc.logback, misc.lombok
     testCompile testing.junit
 }
 

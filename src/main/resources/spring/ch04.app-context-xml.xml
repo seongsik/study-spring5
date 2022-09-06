@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="singerOne" class="com.sik.study.spring5.ch04.Singer"
+        init-method="init" p:name="John Mayer" p:age="39"/>
+
+    <bean id="singerTwo" class="com.sik.study.spring5.ch04.Singer"
+          init-method="init" p:age="72"/>
+
+    <bean id="singerThree" class="com.sik.study.spring5.ch04.Singer"
+          init-method="init" p:name="John Better" p:age="10"/>
+
+
+    <bean id="singerFour" class="com.sik.study.spring5.ch04.SingerWithInterface"
+          p:name="John Mayer" p:age="39"/>
+
+    <bean id="singerFive" class="com.sik.study.spring5.ch04.SingerWithInterface"
+          p:age="72"/>
+
+    <bean id="singerSix" class="com.sik.study.spring5.ch04.SingerWithInterface"
+          p:name="John Better" p:age="10"/>
+
+
+    <context:annotation-config/>
+    <bean id="singerSeven" class="com.sik.study.spring5.ch04.SingerWithJSR250"
+          p:name="John Mayer" p:age="39"/>
+
+    <bean id="singerEight" class="com.sik.study.spring5.ch04.SingerWithJSR250"
+          p:age="72"/>
+
+    <bean id="singerNine" class="com.sik.study.spring5.ch04.SingerWithJSR250"
+          p:name="John Better" p:age="10"/>
+
+    <bean id="johnMayer" class="com.sik.study.spring5.ch04.NamedSinger"/>
+
+
+
+    <bean id="shaDigest" class="com.sik.study.spring5.ch04.MessageDigestFactoryBean" p:algorithmName="SHA1"/>
+
+    <bean id="defaultDigest" class="com.sik.study.spring5.ch04.MessageDigestFactoryBean"/>
+
+    <bean id="digester" class="com.sik.study.spring5.ch04.MessageDigester"
+        p:digest1-ref="shaDigest"
+        p:digest2-ref="defaultDigest"/>
+</beans>
