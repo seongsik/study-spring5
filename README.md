@@ -64,8 +64,7 @@ public class HelloWorldConfiguration {
   * 초기화 이후 이벤트. Bean에 모든 프로퍼티 값을 설정하고 의존성 점검을 마친 직후 발생. 
 * pre-destruction
   * 소멸 전 이벤트. 스프링이 Bean 인스턴스를 소멸시키기 직전에 발생. 
-  * Prototype Bean의 경우 소멸 전 이벤트를 통지하지 않음. 
-
+  * Prototype Bean의 경우 소멸 전 이벤트를 통지하지 않음.
 * Spring 이벤트 수신 메커니즘
   * 인터페이스 기반 : 수신을 원하는 통지 유형 인터페이스를 Bean 에 구현 시 콜백을 통한 통지. (InitializingBean, DisposableBean)
   * 메서드 기반 : 초기화/소멸 시 호출할 메서드명을 ApplicationContext 구성에 지정. (init-method, destroy-method)
@@ -81,5 +80,18 @@ public class HelloWorldConfiguration {
 ### Factory Bean
 * new 연산자로는 생성할 수 없는 객체를 관리하기 위한 어댑터로 FactoryBean 인터페이스를 제공.
 * FactoryBean.getObject() 를 통해 인스턴스 획득
-* 
 
+### Java Bean PropertyEditor
+* property 값을 원래 자료 타입에서 String 으로 변환하거나, 반대의 작용을 하는 인터페이스.
+
+### MessageSource 
+* 스프링의 i18n 국제화 지원 기능으로 MessageSource 인터페이스를 사용. 
+  * ResourceBundleMessageSource : ResourceBundle 을 이용하여 메시지 로드
+  * ReloadableResourceBundleMessageSource : 메시지 소스 파일에서 주기적으로 다시 읽어들일 수 있음. 
+  * StaticMessageSource : 상용 애플리케이션 사용 금지. 
+
+### Spring Profile
+* 특정 프로파일이 활성화되면 해당 프로파일에 정의된 ApplicationContext 인스턴스만 구성됨.
+* 실행 환경에 따라 사용할 프로파일을 다르게 적용할 수 있음.
+  * Environment 인터페이스를 이용한 구성 
+  * JSR-330 애너테이션을 이용한 구성
