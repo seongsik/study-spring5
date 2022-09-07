@@ -95,3 +95,48 @@ public class HelloWorldConfiguration {
 * 실행 환경에 따라 사용할 프로파일을 다르게 적용할 수 있음.
   * Environment 인터페이스를 이용한 구성 
   * JSR-330 애너테이션을 이용한 구성
+
+### Groovy
+* Spring 4.0 부터 적용. Groovy Script 에서 Spring ApplicationContext 를 로드할 수 있음. 
+* Dependency groovy-all 필요.
+* GenericGroovyApplicationContext 를 이용해 접근 가능. 
+
+### Spring boot
+* Spring Application 구축 작업을 간소화하는 목적으로 공통 기능을 제공. 
+* 적절한 의존성 및 버전이 포함되어 제공되며, XML 기반 구성이 전혀 필요하지 않도록 함.
+* build.gradle spring-boot 관련 정의
+```
+buildscript {
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.6.RELEASE"
+    }
+}
+
+...
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+	compile "org.springframework.boot:spring-boot-starter:2.0.6.RELEASE"
+}
+```
+
+#### @SpringBootApplication
+* Class Level 에서 사용하도록 설계된 최상위 애너테이션. 
+* 다음 애너테이션을 모두 정의한 것과 같은 동작을 한다. 
+  * @Configuration : 해당 클래스가 @Bean 으로 빈을 정의하는 구성 클래스임을 정의함. 
+  * @EnableAutoConfiguration : 제공된 의존성을 기반으로 필요할 빈을 추측해 구성, ApplicationContext를 활성화. 
+  * @ComponentScan : Bean 을 탐색할 최상위 패키지를 지정
+* @SpringBootApplication 에 Component Scan 관련 속성을 정의하지 않는 경우. 해당 어트리뷰트를 정의한 클래스의 패키지 하위로 스캔한다.
+
+#### Spring Boot Starter Web
+* spring-boot-starter-web 의존성을 적용한다.
+```
+dependencies {
+	compile "org.springframework.boot:spring-boot-starter-web:2.0.6.RELEASE"
+}
+```
+* 기본적으로 Embedded Tomcat 이 실행되며, 상태체크, 환경정보 출력, 측정과 같은 접속 주소가 컨테이너에 등록됨. 
+  * /actuator/health : application status 를 JSON 문자열로 안내 
+  * /actuator/metrics : Heap Memory 와 Garbage Collection 등 측정 정보를 확인할 수 있음. 
+
+
