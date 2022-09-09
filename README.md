@@ -1,4 +1,5 @@
-# study-spring5
+study-spring5
+=============
 
 ## 참고문헌
 * 전문가를 위한 Spring5 개정판, 길벗출판사
@@ -8,7 +9,7 @@
 * SDK : Azul zulu version 13.0.12
 * Gradle : 6.2
 
-
+------------------------------------------------------------------
 ## Spring IoC, DI
 ### IoC 
 * Dependency Injection
@@ -57,6 +58,7 @@ public class HelloWorldConfiguration {
   * byName으로 연결하고자 클래스에 인위적인 프로퍼티 이름을 지정하려 함.
 
 
+------------------------------------------------------------------
 ## Spring Structure
 ### Bean Lifecycle Management
 * IoC 주요 기능으로, 생성 또는 소멸과 같은 Lifecycle 특정 시점에 통지받을 수 있게 Bean을 생성.
@@ -140,3 +142,26 @@ dependencies {
   * /actuator/metrics : Heap Memory 와 Garbage Collection 등 측정 정보를 확인할 수 있음. 
 
 
+
+------------------------------------------------------------------
+## Spring AOP
+* OOP를 보완하는 방향으로 접근. 
+* 애플리케이션 여러 영역에서 반복되는 로직(횡단 관심사)를 분리해 효과적인 프로그램 구축. 
+
+### AOP 개념
+* Joinpoint : AOP를 사용해 추가 로직을 삽입할 애플리케이션의 특정 지점.
+* Advice : 특정 Joinpoint에 실행되는 코드. Joinpoint 전후로 before/after advice로 구분. 
+* Pointcut : Advice를 실행하는 조건을 정의. 
+* Aspect : 클래스에 캡슐화된 Advice와 Pointcut의 조합. 
+* Weaving : Aspect를 애플리케이션 코드에 삽입하는 시점. 
+* Target : AOP에 의해 수정된 객체. 
+* Introduction : 추가 메서드나 필드를 도입해 객체의 구조를 수정하는 과정. 
+
+### Spring AOP Architecture
+* Spring은 런타임 시점에 횡단 관심사를 분석하고 Proxy Bean을 동적으로 생성.
+* Proxy Bean은 실행 조건(Joinpoint, Pointcut, Advice)를 분석, 적절한 Advice를 Weaving.
+* Spring 에서 제공하는 선언적인 AOP 구성 매커니즘을 사용
+  * ProxyFactoryBean : 
+  * AOP Namespace : 
+  * @AspectJ Annotation : 
+* 
