@@ -162,6 +162,12 @@ dependencies {
 * Proxy Bean은 실행 조건(Joinpoint, Pointcut, Advice)를 분석, 적절한 Advice를 Weaving.
 * Spring 에서 제공하는 선언적인 AOP 구성 매커니즘을 사용
   * ProxyFactoryBean : 
+    * 스프링 AOP의 위빙과 프록시 생성 과정을 제어
+    * 
   * AOP Namespace : 
   * @AspectJ Annotation : 
-* 
+* Spring Advice
+  * setTarget, setAdvice 적용한 프록시 객체를 이용해 Spring Advice 를 이용. 
+  * Before : 메서드에 전달된 인수를 수정할 수 있고 예외를 발생시커 메서드 실행을 제어할 수 있음.
+  * After : 메서드 호출이 결과를 반환한 이후 실행. 반환값 또한 수정 불가함.  
+  * Around : Before + After 와 같지만, 반환값을 수정할 수 있음. 
