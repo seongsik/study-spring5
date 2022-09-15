@@ -22,7 +22,7 @@ study-spring5
   * Contextualized Dependency Lookup : 자원을 관리하는 컨테이너로부터 의존성을 가져오는 방식.
 
 ### Spring Application Context
-* BeanFactory 를 상속한 인터페이스. 
+* BeanFactory 를 상속한 interface. 
 * DI, AOP, 국제화, 이벤트 처리 등의 서비스를 제공. 
 * 직접 코드로 부트스트랩하거나 ContextLoaderListener 를 이용해 부트스트랩. 
 * 일반적으로 XML(or properties)에 Application Infra(Datasource, Transaction Manager, JMS, JMX 등) 을 정의하고, 애너테이션으로 DI구성을 정의하는 방식 선호 
@@ -68,7 +68,7 @@ public class HelloWorldConfiguration {
   * 소멸 전 이벤트. 스프링이 Bean 인스턴스를 소멸시키기 직전에 발생. 
   * Prototype Bean의 경우 소멸 전 이벤트를 통지하지 않음.
 * Spring 이벤트 수신 메커니즘
-  * 인터페이스 기반 : 수신을 원하는 통지 유형 인터페이스를 Bean 에 구현 시 콜백을 통한 통지. (InitializingBean, DisposableBean)
+  * interface 기반 : 수신을 원하는 통지 유형 interface를 Bean 에 구현 시 콜백을 통한 통지. (InitializingBean, DisposableBean)
   * 메서드 기반 : 초기화/소멸 시 호출할 메서드명을 ApplicationContext 구성에 지정. (init-method, destroy-method)
   * 애너테이션 기반 : 초기화/소멸 시 호출할 메서드에 애너테이션 지정. (JSR-250 표준)
 * 표준에 따라 라이프사이클 관리를 직접 구현하는 경우, 이식성을 높일 수 있음. 
@@ -80,14 +80,14 @@ public class HelloWorldConfiguration {
   * 필요 시 Nameable 구현체 등으로 의존성 주입해 사용. 
 
 ### Factory Bean
-* new 연산자로는 생성할 수 없는 객체를 관리하기 위한 어댑터로 FactoryBean 인터페이스를 제공.
+* new 연산자로는 생성할 수 없는 객체를 관리하기 위한 어댑터로 FactoryBean interface를 제공.
 * FactoryBean.getObject() 를 통해 인스턴스 획득
 
 ### Java Bean PropertyEditor
-* property 값을 원래 자료 타입에서 String 으로 변환하거나, 반대의 작용을 하는 인터페이스.
+* property 값을 원래 자료 타입에서 String 으로 변환하거나, 반대의 작용을 하는 interface.
 
 ### MessageSource 
-* 스프링의 i18n 국제화 지원 기능으로 MessageSource 인터페이스를 사용. 
+* 스프링의 i18n 국제화 지원 기능으로 MessageSource interface를 사용. 
   * ResourceBundleMessageSource : ResourceBundle 을 이용하여 메시지 로드
   * ReloadableResourceBundleMessageSource : 메시지 소스 파일에서 주기적으로 다시 읽어들일 수 있음. 
   * StaticMessageSource : 상용 애플리케이션 사용 금지. 
@@ -95,7 +95,7 @@ public class HelloWorldConfiguration {
 ### Spring Profile
 * 특정 프로파일이 활성화되면 해당 프로파일에 정의된 ApplicationContext 인스턴스만 구성됨.
 * 실행 환경에 따라 사용할 프로파일을 다르게 적용할 수 있음.
-  * Environment 인터페이스를 이용한 구성 
+  * Environment interface를 이용한 구성 
   * JSR-330 애너테이션을 이용한 구성
 
 ### Groovy
@@ -161,15 +161,15 @@ dependencies {
 * Proxy Bean은 실행 조건(Joinpoint, Pointcut, Advice)를 분석, 적절한 Advice를 Weaving.
 * Spring 에서 제공하는 선언적인 AOP 구성 매커니즘을 사용
   * ProxyFactoryBean : 
-    * 스프링 AOP의 위빙과 프록시 생성 과정을 제어
-    * setTarget, setAdvice 적용한 프록시 객체를 이용해 Spring Advice 를 이용.
+    * 스프링 AOP의 위빙과 Proxy 생성 과정을 제어
+    * setTarget, setAdvice 적용한 Proxy 객체를 이용해 Spring Advice 를 이용.
 * Spring Advice
   * Before : 메서드에 전달된 인수를 수정할 수 있고 예외를 발생시커 메서드 실행을 제어할 수 있음.
   * After : 메서드 호출이 결과를 반환한 이후 실행. 반환값 또한 수정 불가함.  
   * Around : Before + After 와 같지만, 반환값을 수정할 수 있음. 
   * Throw : 메서드 호출 조인포인트 이후 실행되나, 예외를 발생할 때에만 실행됨. 반환값 수정 불가하나 예외 타입을 변경할 수 있는 강력한 개념. 스프링은 afterThrowing() 메서드를 찾아 호출.
 * Spring Advice 선택
-  * 상황에 맞는 가장 구체적인 어드바이스 선택. Before 만으로 가능한 경우, Around 사용하지 않도록. 
+  * 상황에 맞는 가장 구체적인 advice 선택. Before 만으로 가능한 경우, Around 사용하지 않도록. 
 
 
 ### Spring Advisor & Pointcut
@@ -177,20 +177,20 @@ dependencies {
 * Advisor 를 적용할 메서드를 제한해야 할 때, Pointcut 을 이용
 
 #### Pointcut interface
-* Pointcut : ClassFilter 및 MethodMatcher 를 반환하는 함수를 재정의해 어드바이저 적용 대상을 지정. 
+* Pointcut : ClassFilter 및 메서드Matcher 를 반환하는 함수를 재정의해 어드바이저 적용 대상을 지정. 
 * ClassFilter : 검사할 Class 를 나타내는 Class 인스턴스를 전달. 
-* MethodMatcher
+* 메서드Matcher
   * 일반적으로 정적 Pointcut 사용. 어드바이저가 오버헤드가 큰 경우, 동적 Pointcut 사용을 고려
   * 정적 Pointcut : 대상의 모든 메서드에 대해 matches()로 Pointcut 적용 대상여부를 검사 
   * 동적 Pointcut : 정적 검사 isRuntime() 이 true 일 때 추가로 matches() 수행. 특정 상황에서 포인트컷 적용을 제어할 수 있음.
 
 #### Pointcut Advisor
-* Spring 4.0 에서 여덟개의 Pointcut 인터페이스 구현체를 제공. 
+* Spring 4.0 에서 여덟개의 Pointcut interface 구현체를 제공. 
 * DefaultPointcutAdvisor : 하나의 Pointcut 을 하나의 Advisor 와 연결시키는 간단한 PointcutAdvisor.
 * DynamicMethodMatcherPointcut : matches() 수행 결과에 따라 동적 검사 수행 여부를 결정. 정적 검사 수행결과는 성능을 위해 캐싱.
-* StaticMethodMatcherPointcut : MethodMatcher 구현체(추상클래스). matches()를 이용해 특정 메서드에만 어드바이스를 적용.
-  * NameMatchMethodPointcut : 메서드 이름을 기반으로 어드바이스 적용여부 판단. 
-  * JdkRegexpMethodPointcut : 정규식을 이용해 메서드 이름을 필터링하여 어드바이스 적용여부를 판단. 
+* StaticMethodMatcherPointcut : 메서드Matcher 구현체(추상클래스). matches()를 이용해 특정 메서드에만 advice를 적용.
+  * NameMatchMethodPointcut : 메서드 이름을 기반으로 advice 적용여부 판단. 
+  * JdkRegexpMethodPointcut : 정규식을 이용해 메서드 이름을 필터링하여 advice 적용여부를 판단. 
 * AspectJExpressionPointcut : AspectJ 표현 언어를 사용해 Pointcut을 정의. 
   * aspectjweaver, aspectjrt 의존성 포함
   ```groovy
@@ -199,18 +199,18 @@ dependencies {
     compile "org.aspectj:aspectjrt:1.8.13"
   }
   ```
-  * 정의한 Expression 에 부합하는 메서드에 대해 어드바이스를 적용. 
+  * 정의한 Expression 에 부합하는 메서드에 대해 advice를 적용. 
   ```java
   AspectJExpressionPointcut pc = new AspectJExpressionPointcut();
   pc.setExpression("execution(* sing*(..))");
   ```
 * AnnotationMatchingPointcut : 애너테이션을 포인트컷으로 사용. 
   * @Target 으로 애너테이션을 타입 레벨과 메서드 레벨로 정의할 수 있도록 정의. 
-  * @Target 을 적용한 @interface 애너테이션 정의, 어드바이스 적용 대상 메서드에 애너테이션 선언. 
+  * @Target 을 적용한 @interface 애너테이션 정의, advice 적용 대상 메서드에 애너테이션 선언. 
   ```java
   @Retention(RetentionPolicy.RUNTIME)
-  @Target({ElementType.TYPE, ElementType.METHOD})
-    public @interface AdviceRequired {
+  @Target({ElementType.TYPE, ElementType.메서드})
+  public @interface AdviceRequired {
   }
   
   @AdviceRequired
@@ -219,10 +219,31 @@ dependencies {
   }
   ```
   
+#### Pointcut - Advanced
+##### ControlFlowPointcut
+* 특정 메서드 '에서' 호출될 때에만 어드바이스를 적용할 수 있음.
+```java
+// 특정 메서드가 ControlFlowDemo.test() 내부에서 실행될 때 어드바이스 적용 
+Pointcut pc = new ControlFlowPointcut(ControlFlowDemo.class, "test");
+```
+
+##### ComposablePointcut
+* 두 개 이상의 Pointcut 을 사용해야 하는 경우. 
+  * ComposablePointcut.union() : 조인포인트 호출 체인에 'or' 조건을 추가
+  * ComposablePointcut.intersection() : 조인포인트 호출 체인에 'and' 조건을 추가
+  
+
 #### Proxy
 * Proxy 의 핵심 목적
-  * 메서드 호출을 인터셉트, 필요한 경우 특정 메서드에 적용되는 어드바이스 체인을 실행하는 것. 
-  * 
+  * 메서드 호출을 인터셉트, 필요한 경우 특정 메서드에 적용되는 advice 체인을 실행하는 것. 
 * Proxy Type
-  * JDK Proxy Class 기반 Proxy : 
-  * CGLIB Enhancer 기반 Proxy : 
+  * JDK Proxy Class 기반 Proxy
+    * interface Proxy 만을 생성할 수 있음. 
+    * Proxy 를 적용하는 모든 객체는 적어도 하나의 interface 를 구현해야 함.
+    * JVM 이 모든 메서드 호출을 인터셉트해 invoke() 호출, advice 적용 대상인 경우 advice 체인 호출 후 리플렉션을 이용해 메서드 수행.
+    * 모든 메서드에 대해 invoke() 수행하므로 런타임 오버헤드를 발생시킴. 
+  * CGLIB Enhancer 기반 Proxy 
+    * CGLIB 가 각 Proxy 에 대해 동적으로 바이트코드를 생성, 재사용 가능할 경우 재사용. 
+    * 호출된 메서드에 대해 invoke() 에서 수행하는 과정이 한 번씩만 수행됨. 
+    * 고정 advice 체인을 적용한 CGLIB Proxy 의 성능은 JDK Proxy 와 비교해 우수함.
+
