@@ -107,14 +107,13 @@ public class HelloWorldConfiguration {
 * Spring Application 구축 작업을 간소화하는 목적으로 공통 기능을 제공. 
 * 적절한 의존성 및 버전이 포함되어 제공되며, XML 기반 구성이 전혀 필요하지 않도록 함.
 * build.gradle spring-boot 관련 정의
-```
+```groovy
 buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.6.RELEASE"
     }
 }
 
-...
 apply plugin: 'org.springframework.boot'
 
 dependencies {
@@ -132,7 +131,7 @@ dependencies {
 
 #### Spring Boot Starter Web
 * spring-boot-starter-web 의존성을 적용한다.
-```
+```groovy
 dependencies {
 	compile "org.springframework.boot:spring-boot-starter-web:2.0.6.RELEASE"
 }
@@ -178,15 +177,52 @@ dependencies {
 * Advisor 를 적용할 메서드를 제한해야 할 때, Pointcut 을 이용
 
 #### Pointcut interface
-  * Pointcut : ClassFilter 및 MethodMatcher 를 반환하는 함수를 재정의해 어드바이저 적용 대상을 지정. 
-  * ClassFilter : 검사할 Class 를 나타내는 Class 인스턴스를 전달. 
-  * MethodMatcher
-    * 일반적으로 정적 Pointcut 사용. 어드바이저가 오버헤드가 큰 경우, 동적 Pointcut 사용을 고려
-    * 정적 Pointcut : 대상의 모든 메서드에 대해 matches()로 Pointcut 적용 대상여부를 검사 
-    * 동적 Pointcut : 정적 검사 isRuntime() 이 true 일 때 추가로 matches() 수행. 특정 상황에서 포인트컷 적용을 제어할 수 있음.
+* Pointcut : ClassFilter 및 MethodMatcher 를 반환하는 함수를 재정의해 어드바이저 적용 대상을 지정. 
+* ClassFilter : 검사할 Class 를 나타내는 Class 인스턴스를 전달. 
+* MethodMatcher
+  * 일반적으로 정적 Pointcut 사용. 어드바이저가 오버헤드가 큰 경우, 동적 Pointcut 사용을 고려
+  * 정적 Pointcut : 대상의 모든 메서드에 대해 matches()로 Pointcut 적용 대상여부를 검사 
+  * 동적 Pointcut : 정적 검사 isRuntime() 이 true 일 때 추가로 matches() 수행. 특정 상황에서 포인트컷 적용을 제어할 수 있음.
 
 #### Pointcut Advisor
 * Spring 4.0 에서 여덟개의 Pointcut 인터페이스 구현체를 제공. 
 * DefaultPointcutAdvisor : 하나의 Pointcut 을 하나의 Advisor 와 연결시키는 간단한 PointcutAdvisor.
-* StaticMethodMatcherPointcut : MethodMatcher 구현체(추상클래스). matcher()를 이용해 특정 메서드에만 어드바이스를 적용.
-* DynamicMethodMatcherPointcut : 
+* DynamicMethodMatcherPointcut : matches() 수행 결과에 따라 동적 검사 수행 여부를 결정. 정적 검사 수행결과는 성능을 위해 캐싱.
+* StaticMethodMatcherPointcut : MethodMatcher 구현체(추상클래스). matches()를 이용해 특정 메서드에만 어드바이스를 적용.
+  * NameMatchMethodPointcut : 메서드 이름을 기반으로 어드바이스 적용여부 판단. 
+  * JdkRegexpMethodPointcut : 정규식을 이용해 메서드 이름을 필터링하여 어드바이스 적용여부를 판단. 
+* AspectJExpressionPointcut : AspectJ 표현 언어를 사용해 Pointcut을 정의. 
+  * aspectjweaver, aspectjrt 의존성 포함
+  ```groovy
+  dependencies {
+    compile "org.aspectj:aspectjweaver:1.8.13"
+    compile "org.aspectj:aspectjrt:1.8.13"
+  }
+  ```
+  * 정의한 Expression 에 부합하는 메서드에 대해 어드바이스를 적용. 
+  ```java
+  AspectJExpressionPointcut pc = new AspectJExpressionPointcut();
+  pc.setExpression("execution(* sing*(..))");
+  ```
+* AnnotationMatchingPointcut : 애너테이션을 포인트컷으로 사용. 
+  * @Target 으로 애너테이션을 타입 레벨과 메서드 레벨로 정의할 수 있도록 정의. 
+  * @Target 을 적용한 @interface 애너테이션 정의, 어드바이스 적용 대상 메서드에 애너테이션 선언. 
+  ```java
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ElementType.TYPE, ElementType.METHOD})
+    public @interface AdviceRequired {
+  }
+  
+  @AdviceRequired
+  public void sing(Guitar guitar) {    
+    System.out.println("play : " + guitar.play());
+  }
+  ```
+  
+#### Proxy
+* Proxy 의 핵심 목적
+  * 메서드 호출을 인터셉트, 필요한 경우 특정 메서드에 적용되는 어드바이스 체인을 실행하는 것. 
+  * 
+* Proxy Type
+  * JDK Proxy Class 기반 Proxy : 
+  * CGLIB Enhancer 기반 Proxy : 

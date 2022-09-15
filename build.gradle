@@ -213,6 +213,9 @@ dependencies {
     compile spring.context, misc.slf4jJcl, misc.logback, misc.lombok
     // compile misc.groovy
 
+    // cp05 - aop
+    compile misc.aspectjweaver, misc.aspectjrt
+
     // Springboot Only
     compile boot.starterWeb
 
