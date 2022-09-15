@@ -163,11 +163,30 @@ dependencies {
 * Spring 에서 제공하는 선언적인 AOP 구성 매커니즘을 사용
   * ProxyFactoryBean : 
     * 스프링 AOP의 위빙과 프록시 생성 과정을 제어
-    * 
-  * AOP Namespace : 
-  * @AspectJ Annotation : 
+    * setTarget, setAdvice 적용한 프록시 객체를 이용해 Spring Advice 를 이용.
 * Spring Advice
-  * setTarget, setAdvice 적용한 프록시 객체를 이용해 Spring Advice 를 이용. 
   * Before : 메서드에 전달된 인수를 수정할 수 있고 예외를 발생시커 메서드 실행을 제어할 수 있음.
   * After : 메서드 호출이 결과를 반환한 이후 실행. 반환값 또한 수정 불가함.  
   * Around : Before + After 와 같지만, 반환값을 수정할 수 있음. 
+  * Throw : 메서드 호출 조인포인트 이후 실행되나, 예외를 발생할 때에만 실행됨. 반환값 수정 불가하나 예외 타입을 변경할 수 있는 강력한 개념. 스프링은 afterThrowing() 메서드를 찾아 호출.
+* Spring Advice 선택
+  * 상황에 맞는 가장 구체적인 어드바이스 선택. Before 만으로 가능한 경우, Around 사용하지 않도록. 
+
+
+### Spring Advisor & Pointcut
+* ProxyFactory 방식은 모든 메서드를 가리키는 Pointcut 으로 Advisor 를 구성.
+* Advisor 를 적용할 메서드를 제한해야 할 때, Pointcut 을 이용
+
+#### Pointcut interface
+  * Pointcut : ClassFilter 및 MethodMatcher 를 반환하는 함수를 재정의해 어드바이저 적용 대상을 지정. 
+  * ClassFilter : 검사할 Class 를 나타내는 Class 인스턴스를 전달. 
+  * MethodMatcher
+    * 일반적으로 정적 Pointcut 사용. 어드바이저가 오버헤드가 큰 경우, 동적 Pointcut 사용을 고려
+    * 정적 Pointcut : 대상의 모든 메서드에 대해 matches()로 Pointcut 적용 대상여부를 검사 
+    * 동적 Pointcut : 정적 검사 isRuntime() 이 true 일 때 추가로 matches() 수행. 특정 상황에서 포인트컷 적용을 제어할 수 있음.
+
+#### Pointcut Advisor
+* Spring 4.0 에서 여덟개의 Pointcut 인터페이스 구현체를 제공. 
+* DefaultPointcutAdvisor : 하나의 Pointcut 을 하나의 Advisor 와 연결시키는 간단한 PointcutAdvisor.
+* StaticMethodMatcherPointcut : MethodMatcher 구현체(추상클래스). matcher()를 이용해 특정 메서드에만 어드바이스를 적용.
+* DynamicMethodMatcherPointcut : 
