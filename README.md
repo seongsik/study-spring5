@@ -247,3 +247,12 @@ Pointcut pc = new ControlFlowPointcut(ControlFlowDemo.class, "test");
     * 호출된 메서드에 대해 invoke() 에서 수행하는 과정이 한 번씩만 수행됨. 
     * 고정 advice 체인을 적용한 CGLIB Proxy 의 성능은 JDK Proxy 와 비교해 우수함.
 
+
+#### Spring Introduction
+* 런타임에 기존 객체에 interface 구현체를 introduce 할 수 있다. 
+* 기능이 횡단 관심사(crosscutting)이고 advice 를 사용해 쉽게 구현할 수 없을때 유용. 
+* DeligatingIntroductionInterceptor 를 상속한 인터페이스 구현체를 정의
+* 단, Introduction 과 Pointcut 을 병행할 수 없어 모든 메서드에 어드바이스가 적용됨으로 간주
+* IsModifiedMixin 예제처럼, 객체 변경감지 등에 유용함. 
+
+
