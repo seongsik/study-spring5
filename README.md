@@ -9,9 +9,53 @@ study-spring5
 * SDK : Azul zulu version 13.0.12
 * Gradle : 6.2
 
+
+-------------------------
+# Contents
+- [Spring IoC, DI](#spring-ioc--di)
+  * [IoC](#ioc)
+  * [Spring Application Context](#spring-application-context)
+  * [component-scan](#component-scan)
+    + [Bean Alias Naming](#bean-alias-naming)
+    + [Creation Bean](#creation-bean)
+    + [Autowiring](#autowiring)
+- [Spring Structure](#spring-structure)
+  * [Bean Lifecycle Management](#bean-lifecycle-management)
+  * [Spring Aware](#spring-aware)
+  * [Factory Bean](#factory-bean)
+  * [Java Bean PropertyEditor](#java-bean-propertyeditor)
+  * [MessageSource](#messagesource)
+  * [Spring Profile](#spring-profile)
+  * [Groovy](#groovy)
+  * [Spring boot](#spring-boot)
+    + [@SpringBootApplication](#-springbootapplication)
+    + [Spring Boot Starter Web](#spring-boot-starter-web)
+- [Spring AOP](#spring-aop)
+  * [AOP Concept](#aop-concept)
+  * [Spring AOP Architecture](#spring-aop-architecture)
+  * [Spring Advisor & Pointcut](#spring-advisor---pointcut)
+    + [Pointcut interface](#pointcut-interface)
+    + [Pointcut Advisor](#pointcut-advisor)
+    + [Pointcut - Advanced](#pointcut---advanced)
+      - [ControlFlowPointcut](#controlflowpointcut)
+      - [ComposablePointcut](#composablepointcut)
+    + [Proxy](#proxy)
+    + [Spring Introduction](#spring-introduction)
+- [Spring MVC Request Lifecycle](#spring-mvc-request-lifecycle)
+  - [Filter](#filter)
+  - [DispatcherServlet](#dispatcherservlet)
+  - [Common Services](#common-services)
+  - [Handler Mappings](#handler-mappings)
+  - [Handler Interceptor](#handler-interceptor)
+  - [Handler Exception Resolver](#handler-exception-resolver)
+  - [View Resolver](#view-resolver)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 ------------------------------------------------------------------
-## Spring IoC, DI
-### IoC 
+# Spring IoC, DI
+## IoC 
 * Dependency Injection
   * IoC 컨테이너가 컴포넌트에 의존성을 주입. 
   * Constructor DI : 컴포넌트의 생성자를 이용해 해당 컴포넌트가 필요로 하는 의존성을 주입. 컴포넌트 사용 전에 해당 컴포넌트의 의존성을 반드시 가지고 있어야 할 때 유용하며 불변 객체로 사용도 가능함. 
@@ -21,13 +65,13 @@ study-spring5
   * Dependency Pool : 필요시 레지스트리로부터 의존성을 가져오는 방식. 구 EJB 등 
   * Contextualized Dependency Lookup : 자원을 관리하는 컨테이너로부터 의존성을 가져오는 방식.
 
-### Spring Application Context
+## Spring Application Context
 * BeanFactory 를 상속한 interface. 
 * DI, AOP, 국제화, 이벤트 처리 등의 서비스를 제공. 
 * 직접 코드로 부트스트랩하거나 ContextLoaderListener 를 이용해 부트스트랩. 
 * 일반적으로 XML(or properties)에 Application Infra(Datasource, Transaction Manager, JMS, JMX 등) 을 정의하고, 애너테이션으로 DI구성을 정의하는 방식 선호 
 
-### component-scan
+## component-scan
 * 지정한 패키지 하위의 클래스에 선언된 애너테이션과 Bean 을 스캔하도록 스프링에 지시한다. 
 * 또는 구성 클래스를 이용해서 애너테이션 Bean 정의를 읽을 수 있다. 
 ```xml
@@ -42,15 +86,15 @@ public class HelloWorldConfiguration {
 }
 ```
 
-#### Bean Alias Naming
+### Bean Alias Naming
 * @Component 애너테이션에 인수를 지정하지 않는 경우 스프링 IoC컨테이너에 의해 식별자 결정
 * 클래스명 기준으로 생성하되, 첫 문자를 Lowercase 로 처리. 
 
-#### 빈 생성방식
+### Creation Bean
 * 기본적으로 스프링의 모든 Bean은 기본적으로 Singleton 인스턴스. 
 * 비 싱글턴 객체로 사용하고자 하는 경우(단위테스트 등) 속성 명시하여 prototype, request 등 생성 소멸 시점을 정의할 수 있음.
 
-#### Autowiring
+### Autowiring
 * byName, byType, Constructor, default, no 중 택1 
 * 스프링은 Constructor, byType 방식을 자동으로 선택. 
 * 소규모 Application 에서 시간을 절약할 수 있지만, 유연성이 떨어져 권장하지는 않음. 
@@ -59,8 +103,8 @@ public class HelloWorldConfiguration {
 
 
 ------------------------------------------------------------------
-## Spring Structure
-### Bean Lifecycle Management
+# Spring Structure
+## Bean Lifecycle Management
 * IoC 주요 기능으로, 생성 또는 소멸과 같은 Lifecycle 특정 시점에 통지받을 수 있게 Bean을 생성.
 * post-initialization
   * 초기화 이후 이벤트. Bean에 모든 프로퍼티 값을 설정하고 의존성 점검을 마친 직후 발생. 
@@ -73,37 +117,37 @@ public class HelloWorldConfiguration {
   * 애너테이션 기반 : 초기화/소멸 시 호출할 메서드에 애너테이션 지정. (JSR-250 표준)
 * 표준에 따라 라이프사이클 관리를 직접 구현하는 경우, 이식성을 높일 수 있음. 
 
-### Spring Aware
+## Spring Aware
 * Bean 이 ApplicationContext 컨테이너에 접근하게 하는 특정 상황.
 * ex) 런타임에 로그를 기록할 때, Bean Name을 알아낼 수 있으면 유용함. 
 * 단, Bean Name 에 접근할 수 있다고 해서 Bean 이름에 비즈니스적인 의미를 부여해서는 안 됨.
   * 필요 시 Nameable 구현체 등으로 의존성 주입해 사용. 
 
-### Factory Bean
+## Factory Bean
 * new 연산자로는 생성할 수 없는 객체를 관리하기 위한 어댑터로 FactoryBean interface를 제공.
 * FactoryBean.getObject() 를 통해 인스턴스 획득
 
-### Java Bean PropertyEditor
+## Java Bean PropertyEditor
 * property 값을 원래 자료 타입에서 String 으로 변환하거나, 반대의 작용을 하는 interface.
 
-### MessageSource 
+## MessageSource 
 * 스프링의 i18n 국제화 지원 기능으로 MessageSource interface를 사용. 
   * ResourceBundleMessageSource : ResourceBundle 을 이용하여 메시지 로드
   * ReloadableResourceBundleMessageSource : 메시지 소스 파일에서 주기적으로 다시 읽어들일 수 있음. 
   * StaticMessageSource : 상용 애플리케이션 사용 금지. 
 
-### Spring Profile
+## Spring Profile
 * 특정 프로파일이 활성화되면 해당 프로파일에 정의된 ApplicationContext 인스턴스만 구성됨.
 * 실행 환경에 따라 사용할 프로파일을 다르게 적용할 수 있음.
   * Environment interface를 이용한 구성 
   * JSR-330 애너테이션을 이용한 구성
 
-### Groovy
+## Groovy
 * Spring 4.0 부터 적용. Groovy Script 에서 Spring ApplicationContext 를 로드할 수 있음. 
 * Dependency groovy-all 필요.
 * GenericGroovyApplicationContext 를 이용해 접근 가능. 
 
-### Spring boot
+## Spring boot
 * Spring Application 구축 작업을 간소화하는 목적으로 공통 기능을 제공. 
 * 적절한 의존성 및 버전이 포함되어 제공되며, XML 기반 구성이 전혀 필요하지 않도록 함.
 * build.gradle spring-boot 관련 정의
@@ -121,7 +165,7 @@ dependencies {
 }
 ```
 
-#### @SpringBootApplication
+### @SpringBootApplication
 * Class Level 에서 사용하도록 설계된 최상위 애너테이션. 
 * 다음 애너테이션을 모두 정의한 것과 같은 동작을 한다. 
   * @Configuration : 해당 클래스가 @Bean 으로 빈을 정의하는 구성 클래스임을 정의함. 
@@ -129,7 +173,7 @@ dependencies {
   * @ComponentScan : Bean 을 탐색할 최상위 패키지를 지정
 * @SpringBootApplication 에 Component Scan 관련 속성을 정의하지 않는 경우. 해당 어트리뷰트를 정의한 클래스의 패키지 하위로 스캔한다.
 
-#### Spring Boot Starter Web
+### Spring Boot Starter Web
 * spring-boot-starter-web 의존성을 적용한다.
 ```groovy
 dependencies {
@@ -143,11 +187,11 @@ dependencies {
 
 
 ------------------------------------------------------------------
-## Spring AOP
+# Spring AOP
 * OOP를 보완하는 방향으로 접근. 
 * 애플리케이션 여러 영역에서 반복되는 로직(횡단 관심사)를 분리해 효과적인 프로그램 구축. 
 
-### AOP 개념
+## AOP Concept
 * Joinpoint : AOP를 사용해 추가 로직을 삽입할 애플리케이션의 특정 지점.
 * Advice : 특정 Joinpoint에 실행되는 코드. Joinpoint 전후로 before/after advice로 구분. 
 * Pointcut : Advice를 실행하는 조건을 정의. 
@@ -156,7 +200,7 @@ dependencies {
 * Target : AOP에 의해 수정된 객체. 
 * Introduction : 추가 메서드나 필드를 도입해 객체의 구조를 수정하는 과정. 
 
-### Spring AOP Architecture
+## Spring AOP Architecture
 * Spring은 런타임 시점에 횡단 관심사를 분석하고 Proxy Bean을 동적으로 생성.
 * Proxy Bean은 실행 조건(Joinpoint, Pointcut, Advice)를 분석, 적절한 Advice를 Weaving.
 * Spring 에서 제공하는 선언적인 AOP 구성 매커니즘을 사용
@@ -172,11 +216,11 @@ dependencies {
   * 상황에 맞는 가장 구체적인 advice 선택. Before 만으로 가능한 경우, Around 사용하지 않도록. 
 
 
-### Spring Advisor & Pointcut
+## Spring Advisor & Pointcut
 * ProxyFactory 방식은 모든 메서드를 가리키는 Pointcut 으로 Advisor 를 구성.
 * Advisor 를 적용할 메서드를 제한해야 할 때, Pointcut 을 이용
 
-#### Pointcut interface
+### Pointcut interface
 * Pointcut : ClassFilter 및 메서드Matcher 를 반환하는 함수를 재정의해 어드바이저 적용 대상을 지정. 
 * ClassFilter : 검사할 Class 를 나타내는 Class 인스턴스를 전달. 
 * 메서드Matcher
@@ -184,7 +228,7 @@ dependencies {
   * 정적 Pointcut : 대상의 모든 메서드에 대해 matches()로 Pointcut 적용 대상여부를 검사 
   * 동적 Pointcut : 정적 검사 isRuntime() 이 true 일 때 추가로 matches() 수행. 특정 상황에서 포인트컷 적용을 제어할 수 있음.
 
-#### Pointcut Advisor
+### Pointcut Advisor
 * Spring 4.0 에서 여덟개의 Pointcut interface 구현체를 제공. 
 * DefaultPointcutAdvisor : 하나의 Pointcut 을 하나의 Advisor 와 연결시키는 간단한 PointcutAdvisor.
 * DynamicMethodMatcherPointcut : matches() 수행 결과에 따라 동적 검사 수행 여부를 결정. 정적 검사 수행결과는 성능을 위해 캐싱.
@@ -219,21 +263,21 @@ dependencies {
   }
   ```
   
-#### Pointcut - Advanced
-##### ControlFlowPointcut
+### Pointcut - Advanced
+#### ControlFlowPointcut
 * 특정 메서드 '에서' 호출될 때에만 어드바이스를 적용할 수 있음.
 ```java
 // 특정 메서드가 ControlFlowDemo.test() 내부에서 실행될 때 어드바이스 적용 
 Pointcut pc = new ControlFlowPointcut(ControlFlowDemo.class, "test");
 ```
 
-##### ComposablePointcut
+#### ComposablePointcut
 * 두 개 이상의 Pointcut 을 사용해야 하는 경우. 
   * ComposablePointcut.union() : 조인포인트 호출 체인에 'or' 조건을 추가
   * ComposablePointcut.intersection() : 조인포인트 호출 체인에 'and' 조건을 추가
   
 
-#### Proxy
+### Proxy
 * Proxy 의 핵심 목적
   * 메서드 호출을 인터셉트, 필요한 경우 특정 메서드에 적용되는 advice 체인을 실행하는 것. 
 * Proxy Type
@@ -248,11 +292,71 @@ Pointcut pc = new ControlFlowPointcut(ControlFlowDemo.class, "test");
     * 고정 advice 체인을 적용한 CGLIB Proxy 의 성능은 JDK Proxy 와 비교해 우수함.
 
 
-#### Spring Introduction
+### Spring Introduction
 * 런타임에 기존 객체에 interface 구현체를 introduce 할 수 있다. 
 * 기능이 횡단 관심사(crosscutting)이고 advice 를 사용해 쉽게 구현할 수 없을때 유용. 
 * DeligatingIntroductionInterceptor 를 상속한 인터페이스 구현체를 정의
 * 단, Introduction 과 Pointcut 을 병행할 수 없어 모든 메서드에 어드바이스가 적용됨으로 간주
 * IsModifiedMixin 예제처럼, 객체 변경감지 등에 유용함. 
 
+
+-------------------------
+# Spring MVC Request Lifecycle
+#### Filter
+* J2EE 표준 스펙 기능으로 DispatcherServlet 에 요청이 전달되기 전/후에 URL 패턴에 맞는 요청에 대해 부가작업을 수행.
+* 최전방의 DispatcherServlet보다 앞서 수행되므로, 필터는 Spring 범위 밖에서 처리된다.
+  * Spring Container 가 아닌 Web Container 에의해 관리(Bean 등록은 됨)
+* javax.servlet 의 Filter 인터페이스를 구현.
+  * init() : Filter 객체 초기화, Web Container에 의해 1회 수행.
+  * doFilter() : url-pattern 에 맞는 요청에 대한 처리 수행. 전달인자 FilterChain chain 에 의해 다음 대상으로 요청을 전달.
+  * destroy() : Filter 객체를 서비스에서 제거. Web Container에 의해 1회 수행.
+```text
+Filter는 대체로 Spring과 무관한 전역적으로 처리하는 작업에 대한 처리를 구현한다.
+보안 검사 등으로 스프링 컨테이너 도달 전에 차단하는 등 안정성을 확보할 수 있다. 
+ServletRequest, ServletResponse 를 직접 조작할 수 있다는 점에서 Interceptor 보다 강력한 기술.
+
+Interceptor 는 클라이언트 요청에 대한 전역적 처리를 구현. 컨트롤러로 넘겨주기 위한 정보를 가공하기에 용이함. 
+```
+
+#### DispatcherServlet
+* HTTP 프로토콜로 진입하는 모든 요청을 먼저 받아 적절한 컨트롤러로 요청을 전달.
+* DispatcherServlet 은 HandlerAdapter 어댑터 인터페이스를 통해 요청을 위임.
+  * 어댑터 패턴을 적용하여 컨트롤러의 다양한 구현 방식에 무관하게 요청을 위임할 수 있다.
+* 정적 자원에 대한 처리
+  * 특정 패턴의 요청은 정적 자원에 대한 요청으로 처리함을 명시하는 방법.
+  * 대응하는 컨트롤러 매핑이 없는 경우 정적 자원에 대한 요청으로 처리.
+
+#### Common Services
+* 모든 요청에 대해 제공되는 서비스 레이어.
+* i18n, Theme, File upload 등의 기능을 지원.
+* DispatcherServlet 의 WebApplicationContext 에 정의.
+
+#### Handler Mappings
+* RequestMappingHandlerMapping Class.
+* 요청 매핑 정보를 관리하고, 요청이 왔을 때 이를 처리하는 대상(Handler)를 찾는 클래스.
+* 실제 매핑 정보는 상속하는 부모 클래스 AbstractHandlerMethodMapping 의 MappingRegistry 에 기록된다.
+  * MappingRegistry<RequestMappingInfo, MappingRegistration>
+  * RequestMappingInfo : Http Method 와 URI 를 포함한 헤더, 파라미터 등의 조건
+  * MappingRegistration : HandlerMethod. 매핑되는 컨트롤러의 메소드와 컨트롤러 빈 정보.
+
+#### Handler Interceptor
+* Dispatcher Servlet 이 컨트롤러 호출 전후 요청과 응답을 참조/가공할 수 있는 기능을 제공.
+  * preHandle() : 컨트롤러 메소드 호출 전 수행. 반환 타입(boolean)의 값으로 다음 절차의 수행을 제어할 수 있다.
+  * postHandle() : 컨트롤러 메소드 호출 후 수행. Exception 발생 시 수행되지 않는다.
+  * afterCompletion() : 뷰 수준의 처리까지 모두 완료된 후 수행. 요청 처리 중 사용한 리소스를 반환할 때 사용하기 적합.
+* AOP Advice 로 대체할 수 있으나, Request 객체를 얻을 수 없고 컨트롤러 메소드 구현방식이 다양하여 모두 대응하기 어렵다.
+
+#### Handler Exception Resolver
+* 핸들러의 요청 처리 중 발생하는 예상하지 못한 예외를 처리하기 위해 설계.
+* 에러 처리가 시작되는 곳은 DispatcherServlet. doDispatch 는 Exception 과 Throwable 을 catch 한다.
+* 컨트롤러에 정의한 ExceptionHandler 로 처리가 불가한 경우, 모든 ControllerAdvice Bean 을 검사하여 예외처리한다.
+
+#### View Resolver
+* Controller 는 출력할 View 와 View 에 전달할 객체를 담은 ModelAndView 객체를 반환.
+* 반환된 View 의 논리적인 이름을 기반으로 ViewResolver 가 해석하여 연결.
+* ViewResolver 의 주요 구현 클래스
+  * ContentNegotiationViewResolver : 요청 URL 확장자(MediaType)를 이용해 AcceptHandler 를 사용한 탐색.
+  * FreeMarkerViewResolver : FreeMarker 기반의 템플릿을 탐색.
+  * VelocityViewResolver : Velocity 기반의 뷰를 탐색.
+  * JasperReportsViewResolver : Jasper 리포트 파일로 정의된 뷰를 탐색. 
 
